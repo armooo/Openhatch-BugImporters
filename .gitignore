@@ -5,3 +5,4 @@ include
 lib
 *.pyc
 *.pyo
+_trial_temp
