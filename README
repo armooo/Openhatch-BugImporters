@@ -1,0 +1,16 @@
+This is a collection of code that can import data about
+bugs from around the web. It was designed for use within
+the OpenHatch website at http://openhatch.org/ but you can
+use it too!
+
+Some quick points:
+
+* These bug importers all use Twisted to do asynchronous I/O on the network
+
+* The information we extract is currently the set that is needed for the OpenHatch
+  site. If you need more, you are quite welcome to improve this code and submit a
+  patch to download even more data from these bug trackers.
+
+Contact us and join us:
+
+* https://openhatch.org/contact/
