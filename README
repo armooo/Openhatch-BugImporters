@@ -18,3 +18,10 @@ Contact us and join us:
 Licensing:
 
 * As per setup.py this module is under AGPLv3.
+
+Recommended development process:
+
+* virtualenv .
+* ./bin/python setup.py develop
+* ./bin/python setup.py test
+
