@@ -3,3 +3,5 @@ bin
 *.egg-info
 include
 lib
+*.pyc
+*.pyo
