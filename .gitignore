@@ -1,1 +1,5 @@
 *#
+bin
+*.egg-info
+include
+lib
