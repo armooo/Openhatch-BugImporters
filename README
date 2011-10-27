@@ -23,5 +23,5 @@ Recommended development process:
 
 * virtualenv .
 * ./bin/python setup.py develop
-* ./bin/python setup.py test
+* ./bin/trial bugimporters
 

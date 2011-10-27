@@ -7,4 +7,4 @@ setup(name="bugimporters",
       author='OpenHatch development team <http://lists.openhatch.org/mailman/listinfo/devel>',
       license='AGPLv3',
       packages=find_packages(),
-      install_requires=[])
+      install_requires=['Twisted'])
