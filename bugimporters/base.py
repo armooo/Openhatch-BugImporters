@@ -16,6 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import twisted.web.client
+import logging
+
+from mysite.customs.models import TrackerModel
+from mysite.search.models import Bug
 
 class BugImporter(object):
     #####################################################
@@ -86,7 +90,7 @@ class BugImporter(object):
     ###################################################
     # Importer functions that may require overloading #
     ###################################################
-    def __init__(self, tracker_model, reactor_manager):
+    def __init__(self, tracker_model, reactor_manager, bug_parser=None):
         # Store the tracker model
         self.tm = tracker_model
         # Store the reactor manager
@@ -103,6 +107,8 @@ class BugImporter(object):
         # e.g. if somehow we attempt to download a bug URL both in the initial
         # tracker refresh and the later Bug refresh.
         self.deferred_urls= {}
+        # Take an optional bug_parser to usee with this importer.
+        self.bug_parser = bug_parser
 
     def finish_import(self):
         # This importer has finished, so let the reactor manager know that it
@@ -125,30 +131,19 @@ class BugImporter(object):
         raise NotImplementedError
 
 class AddTrackerForeignKeysToBugs(object):
-    '''The purpose of this class is to:
-
-    * Take as input a list of URLs
-    * Get a list of all Bug objects that match those URLs
-    * For each such Bug, try to find a TrackerModel subclass whose base URL is part of the bug URL
-    * If such a TrackerModel subclass exists, make the bug point at it.
-    * For all the Bug objects we modified, put them back on the work queue.
-    '''
-    def __init__(self, tracker_model, reactor_manager, find_bugs_by_url, list_tracker_model_subclasses):
+    def __init__(self, tracker_model, reactor_manager, bug_parser=None):
         # Store the tracker model
         self.tm = tracker_model
         # Store the reactor manager
         self.rm = reactor_manager
-        # Store the bug finder. This is a callback that, given a list of bug URLs, gives a list of Bug objects
-        self.find_bugs_by_url = find_bugs_by_url
-        # Store the lister of all tracker model subclasses
-        self.list_tracker_model_subclasses = list_tracker_model_subclasses
 
     def process_bugs(self, list_of_url_data_pairs):
         # Unzip the list of bugs and discard the data field.
         bug_urls = [bug_url for (bug_url, bug_data) in list_of_url_data_pairs]
         # Fetch a list of all Bugs that are stale.
-        bugs = self.find_bugs_by_url(bug_urls)
-        tms = self.list_tracker_model_subclasses()
+        bugs = Bug.all_bugs.filter(
+                canonical_bug_link__in = bug_urls)
+        tms = TrackerModel.objects.all().select_subclasses()
         # For each TrackerModel, process its stale Bugs.
         bugs_to_retry = []
         for bug in bugs:
