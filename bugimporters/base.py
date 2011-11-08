@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import dateutil
 import twisted.web.client
 
 class BugImporter(object):
@@ -132,3 +133,13 @@ class BugImporter(object):
     def determine_if_finished(self):
         # Implement this in a subclass
         raise NotImplementedError
+
+def string2naive_datetime(s):
+    time_zoned = dateutil.parser.parse(s)
+    if time_zoned.tzinfo:
+        d_aware = time_zoned.astimezone(dateutil.tz.tzutc())
+        d = d_aware.replace(tzinfo=None)
+    else:
+        d = time_zoned # best we can do
+    return d
+
