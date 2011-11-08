@@ -25,7 +25,7 @@ import twisted.web.http
 
 from mysite.base.decorators import cached_property
 import mysite.base.helpers
-from bugimporters.base import BugImporter
+from bugimporters.base import BugImporter, string2naive_datetime
 import mysite.search.models
 import mysite.customs.bugtrackers.bugzilla
 
@@ -310,7 +310,7 @@ class BugzillaBugParser:
 
     @staticmethod
     def bugzilla_date_to_datetime(date_string):
-        return mysite.base.helpers.string2naive_datetime(date_string)
+        return string2naive_datetime(date_string)
 
     def get_parsed_data_dict(self,
                              base_url, bitesized_type, bitesized_text,
