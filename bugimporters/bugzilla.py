@@ -16,15 +16,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import logging
+import urlparse
+
 import lxml.etree
 import twisted.web.error
 import twisted.web.http
-import urlparse
-import logging
 
 from mysite.base.decorators import cached_property
 import mysite.base.helpers
-from mysite.customs.bugimporters.base import BugImporter
+from bugimporters.base import BugImporter
 import mysite.search.models
 import mysite.customs.bugtrackers.bugzilla
 
